@@ -38,6 +38,20 @@ for (const { locale, title, hero, map } of cases) {
   assert.ok(html.includes(`title="${map}"`), `${locale} localized map label`);
   assert.ok(html.includes('referrerPolicy="strict-origin-when-cross-origin"') || html.includes('referrerpolicy="strict-origin-when-cross-origin"'), `${locale} map referrer policy`);
   assert.ok(html.includes('href="tel:+995555702737"'), `${locale} phone link`);
+  assert.ok(html.includes('name="robots" content="index, follow"'), `${locale} indexable metadata`);
+  assert.ok(html.includes('property="og:image" content="https://www.zendental.ge/images/zen-hero-wide.png"'), `${locale} social image`);
+  assert.ok(html.includes('name="twitter:card" content="summary_large_image"'), `${locale} large social card`);
+  const jsonLd = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
+  const entities = jsonLd.flatMap((document) => document["@graph"] ?? []);
+  const clinic = entities.find((entity) => entity["@type"] === "Dentist");
+  assert.equal(clinic?.telephone, "+995555702737", `${locale} structured contact`);
+  assert.equal(clinic?.address.streetAddress, "63 Merab Kostava Street");
+  assert.ok(!clinic?.aggregateRating && !clinic?.openingHoursSpecification && !clinic?.geo, `${locale} no unconfirmed business details`);
+  assert.equal(entities.find((entity) => entity["@type"] === "WebPage")?.url, `https://www.zendental.ge/${locale}`);
+  const footer = html.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? "";
+  assert.ok(footer.includes('href="https://www.instagram.com/zendental.ge/"'), `${locale} footer Instagram`);
+  assert.ok(footer.includes('href="https://www.facebook.com/zendentaltbilisi"'), `${locale} footer Facebook`);
+  assert.ok(clinic.sameAs.includes("https://www.facebook.com/zendentaltbilisi"), `${locale} structured social profile`);
   assert.ok(!html.includes("Unterminated string"), `${locale} syntax error absent`);
   console.log(`PASS /${locale}: language, translations, SEO, map, contact links`);
 }
@@ -52,6 +66,14 @@ if (base) {
   assert.equal(prerender.dynamicRoutes["/[locale]"].fallback, false, "Unsupported locales have no dynamic fallback");
   for (const asset of ["zen-hero.png", "zen-hero-wide.png"]) {
     assert.ok((await stat(`public/images/${asset}`)).size > 0);
+  }
+  const robots = await readFile(".next/server/app/robots.txt.body", "utf8");
+  assert.ok(robots.includes("Sitemap: https://www.zendental.ge/sitemap.xml"));
+  const sitemap = await readFile(".next/server/app/sitemap.xml.body", "utf8");
+  assert.equal((sitemap.match(/<loc>/g) ?? []).length, 3, "Only published locale URLs in sitemap");
+  for (const { locale } of cases) {
+    assert.ok(sitemap.includes(`<loc>https://www.zendental.ge/${locale}</loc>`));
+    assert.ok(sitemap.includes(`hreflang="${locale}"`));
   }
 }
 console.log("PASS root redirect, unsupported locale, and image availability");

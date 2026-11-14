@@ -8,6 +8,7 @@ import type { Dictionary, Locale } from "@/lib/content";
 import { SmileField } from "./smile-field";
 
 const instagram = "https://www.instagram.com/zendental.ge/";
+const facebook = "https://www.facebook.com/zendentaltbilisi";
 const phone = "+995555702737";
 const directions = "https://www.google.com/maps/search/?api=1&query=Zen+Dental+63+Merab+Kostava+Street+Tbilisi";
 const mapEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13471.53169410768!2d44.77229981511868!3d41.71412228484051!2m3!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440d40af7b7bd7%3A0x39841e9ce2094c29!2zWmVuIERlbnRhbCDigKIg4YOW4YOU4YOcIOGDk-GDlOGDnOGDouGDkOGDmuGDmA!5e1!3m2!1sen!2sge!4v1794696596069!5m2!1sen!2sge";
@@ -205,6 +206,6 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
       <section className="closing section-space page-gutter"><div className="closing-orbit" aria-hidden="true"><i /><i /><i /></div><p className="eyebrow" data-reveal>{c.closing.eyebrow}</p><h2 data-reveal><Lines text={c.closing.title} /></h2><a className="button button-light" href={instagram} target="_blank" rel="noreferrer" data-reveal>{c.closing.cta}<Arrow /></a></section>
     </main>
 
-    <footer className="site-footer page-gutter"><div className="footer-top"><p><Lines text={c.footer.tagline} /></p><LanguageLinks locale={locale} label={c.footer.language} /><a className="text-link" href="#top">{c.footer.back}<span className="up-arrow"><Arrow /></span></a></div><div className="footer-wordmark" aria-hidden="true">zen dental<span>.</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {c.footer.rights}</span><a href={instagram} target="_blank" rel="noreferrer">{c.footer.instagram}<Arrow /></a><a href={`tel:${phone}`}>{c.footer.call}<Arrow /></a><span>{c.visit.city}</span></div></footer>
+    <footer className="site-footer page-gutter"><div className="footer-top"><p><Lines text={c.footer.tagline} /></p><LanguageLinks locale={locale} label={c.footer.language} /><a className="text-link" href="#top">{c.footer.back}<span className="up-arrow"><Arrow /></span></a></div><div className="footer-wordmark" aria-hidden="true">zen dental<span>.</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {c.footer.rights}</span><a href={instagram} target="_blank" rel="noreferrer">{c.footer.instagram}<Arrow /></a><a href={facebook} target="_blank" rel="noreferrer">Facebook<Arrow /></a><a href={`tel:${phone}`}>{c.footer.call}<Arrow /></a><span>{c.visit.city}</span></div></footer>
   </div>;
 }
