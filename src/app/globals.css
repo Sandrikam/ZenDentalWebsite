@@ -1,0 +1,8 @@
+:root { color-scheme: light; background: #f7f7f2; color: #233c35; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; }
+main { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; max-width: 960px; margin: auto; padding: 48px 24px; }
+h1 { font-size: clamp(48px, 9vw, 96px); letter-spacing: -0.06em; margin: 12px 0; }
+p { font-size: 20px; line-height: 1.6; }
+.eyebrow { font-size: 12px; letter-spacing: 0.18em; }
+address { margin-top: 48px; font-style: normal; font-size: 14px; }
