@@ -15,9 +15,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. Edit `src/app/page.tsx` to start building.
+Open http://localhost:3000. Edit `src/components/dental-experience.tsx` to start building.
 
-Contact destinations and page content are in `src/app/page.tsx`; design tokens and responsive styles are in `src/app/globals.css`. The text wordmark can be replaced when the official logo is supplied.
+Contact destinations and page content are in `src/components/dental-experience.tsx`; design tokens and responsive styles are in `src/app/globals.css`. The text wordmark can be replaced when the official logo is supplied.
 
 ```sh
 npm run typecheck
@@ -35,3 +35,11 @@ vercel link --yes --project zendental --scope shieldwise
 ```
 
 The Next.js application lives in `src/app`; put static assets in `public/`.
+
+## Languages and motion
+
+The site serves `/ka`, `/en`, and `/ru`, with `/` redirecting to Georgian. Route metadata is generated in `src/app/[locale]/page.tsx`. Edit English content in `src/lib/content.ts` and translated dictionaries in `src/lib/locales/`. The shared component is `src/components/dental-experience.tsx`.
+
+Motion uses GSAP ScrollTrigger with reduced-motion support and native scrolling. The Google Maps iframe is the exact embed supplied by the clinic.
+
+After building, run `npm run check:site` to validate the rendered locale HTML, SEO alternates, map, and contact links. Optionally pass a running server URL: `npm run check:site -- http://localhost:3000`.
