@@ -2,6 +2,8 @@
 
 Status: draft. Path: prices.
 
+Confirmed by the user: consultation is free, with no commitment to treatment. Treatment prices and inclusions still need approval.
+
 - Approved treatment names and prices/ranges
 - Currency and pricing unit (tooth, jaw, visit, course)
 - What each price includes and excludes

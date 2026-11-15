@@ -40,7 +40,7 @@ The Next.js application lives in `src/app`; put static assets in `public/`.
 
 The site serves `/ka`, `/en`, and `/ru`, with `/` redirecting to Georgian. Route metadata is generated in `src/app/[locale]/page.tsx`. Edit English content in `src/lib/content.ts` and translated dictionaries in `src/lib/locales/`. The shared component is `src/components/dental-experience.tsx`.
 
-Motion uses GSAP ScrollTrigger with reduced-motion support and native scrolling. The Google Maps iframe was refreshed from the same clinic profile after Google rejected the original embed parameter.
+Motion uses one 400ms CSS hero entrance and short control transitions, with reduced-motion support and native scrolling. The Google Maps iframe was refreshed from the same clinic profile after Google rejected the original embed parameter.
 
 After building, run `npm run check:site` to validate the rendered locale HTML, SEO alternates, map, and contact links. Optionally pass a running server URL: `npm run check:site -- http://localhost:3000`.
 
@@ -55,3 +55,7 @@ Verification: `npm test` checks the content publication gate. `npm run build`, `
 ## Future booking system
 
 The proposed booking architecture and clinic decisions are documented in [the booking plan](docs/booking-plan.md): approximately seven doctors using existing Google accounts, two public chairs, a head-doctor-only third chair, administrator approval, and SMS reminders with optional email. This is a discussion draft for future implementation.
+
+## Current design pass
+
+The applied Unslop pass and subsequent copy reduction are documented in [the implementation notes](docs/unslop-implementation.md). Consultation is free with no commitment to treatment, as confirmed by the user. Contact actions use the current phone and Instagram channels; the future booking application remains a separate plan.

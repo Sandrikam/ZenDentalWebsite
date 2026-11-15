@@ -10,6 +10,7 @@ This is a planning document, not an implemented booking system. No calendar acco
 - Administrator needs a simple, Georgian-first interface.
 - Doctors can add appointments manually and block their own time.
 - SMS confirmations/reminders; optional email.
+- Consultation is free, with no commitment to treatment (confirmed by the user). Its duration still needs confirmation before offering calendar slots.
 - Avoid mandatory paid Google Workspace accounts for each doctor.
 
 ## Recommended architecture

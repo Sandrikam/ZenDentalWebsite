@@ -3,9 +3,9 @@ import { readFile, stat } from "node:fs/promises";
 
 const base = process.argv[2];
 const cases = [
-  { locale: "ka", title: "სტომატოლოგიური ზრუნვა თბილისში", hero: "თქვენი ღიმილი.", map: "Zen Dental-ის მდებარეობა Google Maps-ზე" },
-  { locale: "en", title: "Thoughtful dental care in Tbilisi", hero: "Your smile.", map: "Zen Dental location on Google Maps" },
-  { locale: "ru", title: "внимательная стоматология в Тбилиси", hero: "Ваша улыбка.", map: "Zen Dental на Google Картах" },
+  { locale: "ka", title: "სტომატოლოგიური კლინიკა თბილისში", hero: "სტომატოლოგია", map: "Zen Dental-ის მდებარეობა Google Maps-ზე" },
+  { locale: "en", title: "Dental clinic in Tbilisi", hero: "Kostava Street", map: "Zen Dental location on Google Maps" },
+  { locale: "ru", title: "Стоматологическая клиника в Тбилиси", hero: "Стоматология", map: "Zen Dental на Google Картах" },
 ];
 
 if (base) {
@@ -65,6 +65,12 @@ for (const { locale, title, hero, map } of cases) {
   assert.ok(footer.includes('href="https://www.instagram.com/zendental.ge/"'), `${locale} footer Instagram`);
   assert.ok(footer.includes('href="https://www.facebook.com/zendentaltbilisi"'), `${locale} footer Facebook`);
   assert.ok(clinic.sameAs.includes("https://www.facebook.com/zendentaltbilisi"), `${locale} structured social profile`);
+  assert.ok(html.includes('class="button hero-cta" href="#visit"'), `${locale} consultation links to clinic contact details`);
+  const header = html.match(/<header[\s\S]*?<\/header>/)?.[0] ?? "";
+  assert.ok(!header.includes("Book a visit") && !header.includes("ვიზიტის დაჯავშნა") && !header.includes("Записаться на приём"), `${locale} contact labels do not promise online booking`);
+  const consultation = { ka: "უფასო კონსულტაცია", en: "Free consultation", ru: "Бесплатная консультация" }[locale];
+  assert.ok(html.includes(consultation), `${locale} confirmed free-consultation offer`);
+  assert.ok(!html.includes(String.fromCharCode(0x2014)), `${locale} no em dashes`);
   assert.ok(!html.includes("Unterminated string"), `${locale} syntax error absent`);
   console.log(`PASS /${locale}: language, translations, SEO, map, contact links`);
 }

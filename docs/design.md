@@ -29,18 +29,17 @@ The original repository lists 63 Merab Kostava Street, Tbilisi. The phone +995 5
 Replace the text wordmark with the supplied logo, adjust CSS color tokens to its official palette, add real clinic photography, and replace provisional marketing copy with approved content.
 
 
-## Locale and motion revision
+## Current layout and motion
 
-The current Neko site was inspected in Chrome during this revision. Its centered serif hero, transparent navigation, softly rectangular buttons, image blur and rounded framing on scroll, image-led cards, right-aligned text reveal, and rounded image-and-tabs panel informed the revised composition. Those patterns are adapted to a mostly white site with blush accents; no Neko imagery or copy is used.
+The original Neko-inspired direction has been refined using Unslop by Damir Sokolovsky (@heydamir), CC BY 4.0, after the user approved the audit. White, blush, charcoal and serif display typography remain. A single conceptual smile sculpture appears in the hero. Repeated point clouds, ribbons, scanner frames and orbit decoration have been removed.
 
-- Routes: /ka (default), /en, /ru. Each route renders its own document language, translated content and metadata, canonical URL, and language alternates.
-- Dictionary source: src/lib/content.ts; translations: src/lib/locales/ka.ts and ru.ts. Embedded newlines in titles must be escaped as \\n, never literal line breaks inside quoted TypeScript strings.
-- Language navigation preserves the current section hash. Native language names appear in accessible labels and tooltips.
-- GSAP ScrollTrigger controls the hero image's scale, blur and inset/rounded framing, heading entrance, card reveals, and word-by-word text emphasis. Normal browser scrolling remains intact.
-- The logo, contact CTA and language controls remain available when the middle navigation retracts during downward scrolling. Keyboard focus restores navigation. Mobile menu supports Escape.
-- Reduced motion disables scroll animation and renders point-cloud artwork as a still image. Otherwise the point-cloud artwork settles within four seconds, and keyboard interaction uses a static frame. Animation contexts and observers are cleaned up on locale change/unmount; offscreen canvases stop rendering.
-- The location panel contains a fresh Google Maps iframe for the user's exact clinic place (the original pb parameter was rejected), with lazy loading, fullscreen support, translated title and strict-origin-when-cross-origin referrer policy.
-- Automated checks: npm run build, npm run typecheck, npm run check:site. The site checker inspects generated HTML without networking by default, or accepts a running server URL as its argument.
+- Routes remain /ka, /en and /ru, with Georgian as the default.
+- The fixed navigation stays available while scrolling, with one shared header surface.
+- Motion is one 400ms CSS hero entrance plus short interaction transitions. Reduced-motion and keyboard input disable movement where appropriate. There is no GSAP dependency, scroll parallax, image blur or canvas animation.
+- Care information is presented as compact text panels. After feedback that there was too much copy, the redundant statement section was removed and descriptions were shortened in all three languages.
+- Free consultation with no commitment to treatment is an owner-confirmed fact, emphasized in the hero, FAQ and final contact section. Consultation requests currently use phone/Instagram; no calendar booking workflow has been implemented.
+- The Google map uses the refreshed embed for the exact clinic place.
+- See docs/unslop-implementation.md for applied passes and QA coverage.
 
 ### Wide hero artwork
 

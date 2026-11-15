@@ -26,3 +26,7 @@ Verified review sources:
 A fresh embed was obtained from Google Share > Embed a map after the previous pb parameter was visibly rejected by Google. Both embeds identify the same verified clinic place.
 
 Still needed from the clinic: clinicians and verified biographies, actual service list and approved prices, original photography/logo, equipment, appointment workflow and payment arrangements, case consent, and clinical text reviewer.
+
+## User confirmation
+
+The user confirmed that consultation is free, with no commitment to treatment. This is supplied by the user in the conversation, not inferred from Google reviews or hours. The site now states this in the hero, FAQ and contact section.
