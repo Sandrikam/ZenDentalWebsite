@@ -6,6 +6,7 @@ This is a planning document, not an implemented booking system. No calendar acco
 
 - Approximately seven doctors, mostly using personal Gmail/Google Calendar.
 - Three chairs: two publicly bookable; one reserved for the head doctor and excluded from public allocation.
+- Expansion planned from three to seven chairs (user update, 15 November 2026). The future public/private allocation, opening date and staffing are not yet confirmed. Model chairs as configurable resources rather than hard-coding three columns. See [clinic operations plan](clinic-operations-plan.md).
 - Administrator approves online requests, consulting a doctor when necessary.
 - Administrator needs a simple, Georgian-first interface.
 - Doctors can add appointments manually and block their own time.
@@ -21,7 +22,7 @@ Use one clinic-owned Google account to own seven secondary calendars, one per do
 
 If a doctor's personal calendar should prevent bookings, they can share only its free/busy information with the clinic account. The app checks that calendar without receiving personal event descriptions. This is optional per doctor; without that connection, the doctor must put unavailable time in their clinic calendar. Email invitations alone do not grant calendar access or establish availability.
 
-The two shared chairs and the head doctor's restricted chair are database resources; they do not require paid Workspace resource-calendar accounts. Google synchronization uses the clinic-owned doctor calendars, while chair availability is enforced centrally.
+The current two shared chairs and the head doctor's restricted chair are database resources; they do not require paid Workspace resource-calendar accounts. Add the four planned chairs only after their roles and hours are confirmed. Google synchronization uses the clinic-owned doctor calendars, while chair availability is enforced centrally. An EHR/practice-management product evaluation must precede implementation: if the selected product owns scheduling, integrate with that schedule instead of creating two competing booking databases.
 
 ## Capacity and scheduling rules
 

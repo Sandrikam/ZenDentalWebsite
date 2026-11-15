@@ -40,7 +40,7 @@ The Next.js application lives in `src/app`; put static assets in `public/`.
 
 The site serves `/ka`, `/en`, and `/ru`, with `/` redirecting to Georgian. Route metadata is generated in `src/app/[locale]/page.tsx`. Edit English content in `src/lib/content.ts` and translated dictionaries in `src/lib/locales/`. The shared component is `src/components/dental-experience.tsx`.
 
-Motion uses one 400ms CSS hero entrance and short control transitions, with reduced-motion support and native scrolling. The Google Maps iframe was refreshed from the same clinic profile after Google rejected the original embed parameter.
+Motion uses a 400ms CSS hero copy entrance and native scroll-linked hero image zoom, parallax, framing and soft blur. The fixed navbar gains a translucent frosted background after scrolling. Reduced-motion preference disables the image effects. The Google Maps iframe was refreshed from the same clinic profile after Google rejected the original embed parameter.
 
 After building, run `npm run check:site` to validate the rendered locale HTML, SEO alternates, map, and contact links. Optionally pass a running server URL: `npm run check:site -- http://localhost:3000`.
 

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Dictionary, Locale } from "@/lib/content";
 import { clinic } from "@/lib/clinic";
 import { googleReviews, googleReviewSnapshot } from "@/lib/reviews";
@@ -44,9 +44,70 @@ function LanguageLinks({ locale, label }: { locale: Locale; label: string }) {
 }
 
 export function DentalExperience({ locale, content: c, pages = [] }: { locale: Locale; content: Dictionary; pages?: { href: string; title: string }[] }) {
+  const root = useRef<HTMLDivElement>(null);
+  const [navScrolled, setNavScrolled] = useState(false);
   const [inputMethod, setInputMethod] = useState<"pointer" | "keyboard">("pointer");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeApproach, setActiveApproach] = useState(0);
+
+  useEffect(() => {
+    const update = () => setNavScrolled(window.scrollY > 48);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
+
+  useEffect(() => {
+    const scope = root.current!;
+    const hero = scope.querySelector<HTMLElement>(".hero")!;
+    const scene = scope.querySelector<HTMLElement>(".hero-scene")!;
+    const photo = scope.querySelector<HTMLElement>(".hero-photo")!;
+    const image = photo.querySelector("img")!;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    let progress = 0;
+    let target = 0;
+    let lastTime = 0;
+    const draw = (time: number) => {
+      const elapsed = lastTime ? Math.min(time - lastTime, 64) : 16;
+      lastTime = time;
+      progress += (target - progress) * (1 - Math.exp(-elapsed / 120));
+      if (Math.abs(target - progress) < 0.0001) progress = target;
+      photo.style.transform = `translateY(${-2 + progress * 9}%) scale(${1.1 - progress * 0.1})`;
+      const framing = Math.min(progress / 0.65, 1);
+      scene.style.clipPath = `inset(0% ${framing * 2.6}% 0% ${framing * 2.6}% round 0px 0px ${framing * 48}px ${framing * 48}px)`;
+      image.style.filter = `blur(${Math.max(0, Math.min((progress - 0.15) / 0.65, 1)) * 5}px)`;
+      frame = progress === target ? 0 : requestAnimationFrame(draw);
+    };
+    const update = () => {
+      if (motion.matches) return;
+      const rect = hero.getBoundingClientRect();
+      target = Math.max(0, Math.min(-rect.top / rect.height, 1));
+      if (!frame) { lastTime = 0; frame = requestAnimationFrame(draw); }
+    };
+    const reset = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      progress = 0;
+      photo.style.removeProperty("transform");
+      scene.style.removeProperty("clip-path");
+      image.style.removeProperty("filter");
+      update();
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    motion.addEventListener("change", reset);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      motion.removeEventListener("change", reset);
+      cancelAnimationFrame(frame);
+      photo.style.removeProperty("transform");
+      scene.style.removeProperty("clip-path");
+      image.style.removeProperty("filter");
+    };
+  }, [locale]);
 
   useEffect(() => {
     if (menuOpen && inputMethod === "keyboard") document.querySelector<HTMLAnchorElement>("#main-navigation a")?.focus();
@@ -74,10 +135,10 @@ export function DentalExperience({ locale, content: c, pages = [] }: { locale: L
     };
   }, [menuOpen]);
 
-  return <div className="dental-experience" data-locale={locale} data-input-method={inputMethod}
+  return <div className="dental-experience" ref={root} data-locale={locale} data-input-method={inputMethod}
     onKeyDownCapture={() => setInputMethod("keyboard")} onPointerDownCapture={() => setInputMethod("pointer")}>
     <a className="skip-link" href="#main-content">{c.nav.skip}</a>
-    <header className="site-header" onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false); }}>
+    <header className={`site-header${navScrolled ? " is-scrolled" : ""}${menuOpen ? " menu-is-open" : ""}`} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false); }}>
       <Link className="wordmark" href={`/${locale}`} aria-label={c.nav.home}>zen dental<span className="brand-dot" /></Link>
       <nav id="main-navigation" className={`main-navigation ${menuOpen ? "is-open" : ""}`} aria-label={c.nav.label} onKeyDown={(event) => {
         if (event.key === "Escape") { setMenuOpen(false); document.getElementById("menu-toggle")?.focus(); }

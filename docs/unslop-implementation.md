@@ -44,3 +44,7 @@ These checks are not a certification of complete WCAG conformance or physical-de
 ## Next content update
 
 Replace the temporary text wordmark when the official logo arrives. Add actual clinician/clinic photographs and approved service details through the existing content workflow. Maintain the concise copy direction instead of filling newly available space with generic reassurance.
+
+## User follow-up: hero motion and navbar
+
+The user requested restoration of the previous hero image animation and a slightly transparent navbar on scroll. Restored the same zoom/parallax, rounded framing and soft blur using native animation frames without adding a dependency. The header remains visible, with a frosted 82% white surface after 48px and a more opaque surface for keyboard focus and an open mobile menu. Reduced-motion preference switches the hero back to static, including when changed at runtime. The short copy remains.

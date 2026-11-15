@@ -35,7 +35,7 @@ The original Neko-inspired direction has been refined using Unslop by Damir Soko
 
 - Routes remain /ka, /en and /ru, with Georgian as the default.
 - The fixed navigation stays available while scrolling, with one shared header surface.
-- Motion is one 400ms CSS hero entrance plus short interaction transitions. Reduced-motion and keyboard input disable movement where appropriate. There is no GSAP dependency, scroll parallax, image blur or canvas animation.
+- Per user follow-up, hero image zoom, parallax, rounded framing and soft blur are restored with a small native requestAnimationFrame effect. The navbar becomes subtly translucent after 48px of scroll, with a blur backplate and a more opaque surface when focused or the mobile menu is open. Reduced-motion preference disables the image effects. Short copy and compact care sections remain. There is no GSAP dependency or canvas animation.
 - Care information is presented as compact text panels. After feedback that there was too much copy, the redundant statement section was removed and descriptions were shortened in all three languages.
 - Free consultation with no commitment to treatment is an owner-confirmed fact, emphasized in the hero, FAQ and final contact section. Consultation requests currently use phone/Instagram; no calendar booking workflow has been implemented.
 - The Google map uses the refreshed embed for the exact clinic place.

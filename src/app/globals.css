@@ -36,6 +36,11 @@ section>div { min-width:0; }
 
 /* One header surface; links stay available while the page scrolls. */
 .site-header { position:fixed; z-index:50; top:16px; left:50%; transform:translateX(-50%); width:calc(100% - 48px); display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:32px; min-height:64px; padding:8px 16px; background:rgba(255,255,255,.96); border:1px solid rgba(48,43,44,.08); border-radius:16px; }
+.site-header { transition:background-color 180ms ease; }
+@supports (backdrop-filter:blur(16px)) or (-webkit-backdrop-filter:blur(16px)) {
+  .site-header.is-scrolled { background:rgba(255,255,255,.82); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); }
+  .site-header.is-scrolled.menu-is-open,.site-header.is-scrolled:focus-within { background:rgba(255,255,255,.96); }
+}
 .wordmark { display:inline-flex; align-items:baseline; min-height:44px; white-space:nowrap; font:600 25px/44px 'Manrope',Arial,sans-serif; letter-spacing:-.05em; }
 .brand-dot { width:5px; height:5px; margin-left:3px; border-radius:50%; background:var(--rose); }
 .main-navigation { justify-self:center; display:flex; align-items:center; gap:32px; }
