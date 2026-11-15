@@ -51,3 +51,7 @@ Two manually selected Google review excerpts live in `src/lib/reviews.ts`. Their
 Future service, doctor, prices and patient-information pages use `src/content/pages.ts`. Collection briefs are in `content/templates/`. Set a page to `published` only after clinic approval and complete translations. Only approved, nonempty translations get static routes, footer links, canonical/language metadata and sitemap entries. Drafts stay unavailable. There are currently no published detail pages. Booking process changes remain deferred.
 
 Verification: `npm test` checks the content publication gate. `npm run build`, `npm run typecheck` and `npm run check:site` check the production build and locale HTML. See `docs/accessibility-mobile-review.md` for browser QA coverage and limitations.
+
+## Future booking system
+
+The proposed booking architecture and clinic decisions are documented in [the booking plan](docs/booking-plan.md): approximately seven doctors using existing Google accounts, two public chairs, a head-doctor-only third chair, administrator approval, and SMS reminders with optional email. This is a discussion draft for future implementation.

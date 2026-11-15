@@ -1,6 +1,6 @@
 export const en = {
   meta: {
-    title: "Zen Dental — Thoughtful dental care in Tbilisi",
+    title: "Zen Dental | Thoughtful dental care in Tbilisi",
     description: "A calmer approach to your smile. Meet Zen Dental at 63 Merab Kostava Street, Tbilisi, and get in touch to plan your visit.",
   },
   nav: { care: "Our care", approach: "Our approach", visit: "Find us", book: "Book a visit", menu: "Menu", close: "Close", label: "Main navigation", language: "Choose language", home: "Zen Dental home", skip: "Skip to content" },

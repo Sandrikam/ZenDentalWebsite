@@ -41,7 +41,7 @@ function LanguageLinks({ locale, label }: { locale: Locale; label: string }) {
       event.preventDefault();
       router.push(`/${language.locale}${window.location.hash}`);
     }}
-  >{language.short}<span className="sr-only"> — {language.label}</span></Link>)}</nav>;
+  >{language.short}<span className="sr-only">, {language.label}</span></Link>)}</nav>;
 }
 
 export function DentalExperience({ locale, content: c, pages = [] }: { locale: Locale; content: Dictionary; pages?: { href: string; title: string }[] }) {
@@ -235,7 +235,7 @@ export function DentalExperience({ locale, content: c, pages = [] }: { locale: L
         <div className="review-grid">{googleReviews.map((review) => <figure className="review-card" key={review.url}>
           <div className="review-card-top"><span className="review-stars" role="img" aria-label={c.reviews.rating.replace("{rating}", String(review.rating))}>★★★★★</span><span>Google</span></div>
           <blockquote><p>“{review.quote[locale]}”</p></blockquote><figcaption><strong>{review.author}</strong><span>{locale === "en" ? c.reviews.excerpt : c.reviews.translated}</span></figcaption>
-          <a className="text-link" href={review.url} target="_blank" rel="noreferrer" aria-label={`${c.reviews.read} — ${review.author}`}>{c.reviews.read}<Arrow /></a>
+          <a className="text-link" href={review.url} target="_blank" rel="noreferrer" aria-label={`${c.reviews.read}, ${review.author}`}>{c.reviews.read}<Arrow /></a>
         </figure>)}</div>
       </section>
 
