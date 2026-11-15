@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { Dictionary, Locale } from "@/lib/content";
 import { SmileField } from "./smile-field";
+import { clinic } from "@/lib/clinic";
+import { googleReviews, googleReviewSnapshot } from "@/lib/reviews";
 
-const instagram = "https://www.instagram.com/zendental.ge/";
-const facebook = "https://www.facebook.com/zendentaltbilisi";
-const phone = "+995555702737";
-const directions = "https://www.google.com/maps/search/?api=1&query=Zen+Dental+63+Merab+Kostava+Street+Tbilisi";
-const mapEmbed = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13471.53169410768!2d44.77229981511868!3d41.71412228484051!2m3!1f0!2f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440d40af7b7bd7%3A0x39841e9ce2094c29!2zWmVuIERlbnRhbCDigKIg4YOW4YOU4YOcIOGDk-GDlOGDnOGDouGDkOGDmuGDmA!5e1!3m2!1sen!2sge!4v1794696596069!5m2!1sen!2sge";
+const { instagram, facebook, telephone: phone, googleMaps: directions, mapEmbed } = clinic;
 const languages = [
   { locale: "ka", label: "ქართული", short: "KA" },
   { locale: "en", label: "English", short: "EN" },
@@ -46,12 +44,39 @@ function LanguageLinks({ locale, label }: { locale: Locale; label: string }) {
   >{language.short}<span className="sr-only"> — {language.label}</span></Link>)}</nav>;
 }
 
-export function DentalExperience({ locale, content: c }: { locale: Locale; content: Dictionary }) {
+export function DentalExperience({ locale, content: c, pages = [] }: { locale: Locale; content: Dictionary; pages?: { href: string; title: string }[] }) {
   const root = useRef<HTMLDivElement>(null);
+  const [inputMethod, setInputMethod] = useState<"pointer" | "keyboard">("pointer");
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeApproach, setActiveApproach] = useState(0);
   const [navCompact, setNavCompact] = useState(false);
   const [navHidden, setNavHidden] = useState(false);
+
+  useEffect(() => {
+    if (menuOpen && inputMethod === "keyboard") document.querySelector<HTMLAnchorElement>("#main-navigation a")?.focus();
+  }, [menuOpen]);
+
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && menuOpen) {
+        setMenuOpen(false);
+        document.getElementById("menu-toggle")?.focus();
+      }
+    };
+    const outside = (event: PointerEvent) => {
+      if (!(event.target as Element).closest(".site-header")) setMenuOpen(false);
+    };
+    const desktop = window.matchMedia("(min-width: 1200px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMenuOpen(false); };
+    document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", outside);
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => {
+      document.removeEventListener("keydown", close);
+      document.removeEventListener("pointerdown", outside);
+      desktop.removeEventListener("change", closeOnDesktop);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     let previous = window.scrollY;
@@ -103,12 +128,12 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
           scrollTrigger: { trigger: query(".hero"), start: "15% top", end: "80% top", scrub: 0.5 },
         });
         query(".care-card").forEach((element: Element, index: number) => {
-          gsap.from(element, { y: 55, opacity: 0, duration: 1.1, delay: index * 0.09, ease: "power3.out", scrollTrigger: { trigger: element, start: "top 92%", once: true } });
+          gsap.from(element, { y: 55, duration: 1.1, delay: index * 0.09, ease: "power3.out", scrollTrigger: { trigger: element, start: "top 92%", once: true } });
         });
         query("[data-reveal]").forEach((element: Element) => {
-          gsap.from(element, { y: 48, opacity: 0, duration: 1.05, ease: "power3.out", scrollTrigger: { trigger: element, start: "top 90%", once: true } });
+          gsap.from(element, { y: 32, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: element, start: "top 90%", once: true } });
         });
-        gsap.fromTo(query(".statement-word"), { color: "#d2c6cb" }, {
+        gsap.fromTo(query(".statement-word"), { color: "#75646d" }, {
           color: "#302b2c", stagger: 0.16, ease: "none",
           scrollTrigger: { trigger: query(".statement-text"), start: "top 78%", end: "bottom 42%", scrub: 0.5 },
         });
@@ -123,9 +148,10 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
     return () => { cancelled = true; dispose?.(); };
   }, [locale]);
 
-  return <div className="dental-experience" ref={root} data-locale={locale}>
+  return <div className="dental-experience" ref={root} data-locale={locale} data-input-method={inputMethod}
+    onKeyDownCapture={() => setInputMethod("keyboard")} onPointerDownCapture={() => setInputMethod("pointer")}>
     <a className="skip-link" href="#main-content">{c.nav.skip}</a>
-    <header className={`site-header ${navCompact ? "is-compact" : ""} ${navHidden && !menuOpen ? "is-hidden" : ""}`} onFocusCapture={() => setNavHidden(false)}>
+    <header className={`site-header ${navCompact ? "is-compact" : ""} ${navHidden && !menuOpen ? "is-hidden" : ""}`} onFocusCapture={() => setNavHidden(false)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false); }}>
       <Link className="wordmark" href={`/${locale}`} aria-label={c.nav.home}>zen dental<span className="brand-dot" /></Link>
       <nav id="main-navigation" className={`main-navigation ${menuOpen ? "is-open" : ""}`} aria-label={c.nav.label} onKeyDown={(event) => {
         if (event.key === "Escape") { setMenuOpen(false); document.getElementById("menu-toggle")?.focus(); }
@@ -143,7 +169,7 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
       </div>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <section className="hero" id="top" aria-labelledby="hero-title">
         <div className="hero-scene"><div className="hero-photo"><Image src="/images/zen-hero-wide.png" alt={c.hero.imageAlt} fill priority sizes="100vw" /></div><div className="hero-wash" /></div>
         <div className="hero-copy page-gutter">
@@ -165,7 +191,7 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
       <section className="care-gallery page-gutter" aria-label={c.nav.care}>
         {c.care.items.map((item, index) => <article className="care-card" key={item.label}>
           <div className={`story-art story-art-${index}`}>
-            {index === 0 ? <Image src="/images/zen-hero.png" alt="" fill sizes="(max-width: 700px) 90vw, 33vw" /> : index === 1 ? <SmileField /> : <div className="smile-ribbons" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>}
+            {index === 0 ? <Image src="/images/zen-hero.png" alt="" fill sizes="(max-width: 700px) 90vw, 33vw" /> : index === 1 ? <SmileField still={inputMethod === "keyboard"} /> : <div className="smile-ribbons" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>}
             <p className="card-label"><span>0{index + 1}</span>{item.label}</p>
           </div>
           <div className="care-card-copy"><h3>{item.title}</h3><p>{item.text}</p><a className="text-link" href={instagram} target="_blank" rel="noreferrer">{item.link}<Arrow /></a></div>
@@ -181,31 +207,43 @@ export function DentalExperience({ locale, content: c }: { locale: Locale; conte
       <section className="approach section-space page-gutter" id="approach">
         <div className="section-heading"><p className="eyebrow" data-reveal>{c.approach.eyebrow}</p><h2 data-reveal><Lines text={c.approach.title} /></h2></div>
         <div className="approach-layout">
-          <div className="approach-visual"><SmileField phase={activeApproach} /><div className="visual-corners" aria-hidden="true"><i /><i /><i /><i /></div><span className="visual-caption">ZEN DENTAL / TBILISI</span></div>
+          <div className="approach-visual"><SmileField phase={activeApproach} still={inputMethod === "keyboard"} /><div className="visual-corners" aria-hidden="true"><i /><i /><i /><i /></div><span className="visual-caption">ZEN DENTAL / TBILISI</span></div>
           <div className="approach-copy">
             <div className="approach-tabs" role="tablist" aria-label={c.approach.stepLabel}>
-              {c.approach.steps.map((step, index) => <button id={`approach-tab-${index}`} role="tab" aria-selected={activeApproach === index} aria-controls="approach-panel" tabIndex={activeApproach === index ? 0 : -1} key={step.label} onClick={() => setActiveApproach(index)} onKeyDown={(event) => {
+              {c.approach.steps.map((step, index) => <button id={`approach-tab-${index}`} role="tab" aria-selected={activeApproach === index} aria-controls={`approach-panel-${index}`} tabIndex={activeApproach === index ? 0 : -1} key={step.label} onClick={() => setActiveApproach(index)} onKeyDown={(event) => {
                 if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
                 event.preventDefault();
-                const next = event.key === "Home" ? 0 : event.key === "End" ? 2 : (index + (event.key === "ArrowRight" ? 1 : 2)) % 3;
+                const total = c.approach.steps.length;
+                const next = event.key === "Home" ? 0 : event.key === "End" ? total - 1 : (index + (event.key === "ArrowRight" ? 1 : total - 1)) % total;
                 setActiveApproach(next); document.getElementById(`approach-tab-${next}`)?.focus();
               }}><span>0{index + 1}</span>{step.label}</button>)}
             </div>
-            <div role="tabpanel" id="approach-panel" tabIndex={0} aria-labelledby={`approach-tab-${activeApproach}`} className="approach-panel" key={activeApproach}><span className="panel-index" aria-hidden="true">0{activeApproach + 1}</span><h3>{c.approach.steps[activeApproach].title}</h3><p>{c.approach.steps[activeApproach].text}</p><a className="text-link" href={instagram} target="_blank" rel="noreferrer">{c.nav.book}<Arrow /></a></div>
+            {c.approach.steps.map((step, index) => <div role="tabpanel" id={`approach-panel-${index}`} tabIndex={0} aria-labelledby={`approach-tab-${index}`} hidden={activeApproach !== index} className="approach-panel" key={step.label}><span className="panel-index" aria-hidden="true">0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p><a className="text-link" href={instagram} target="_blank" rel="noreferrer">{c.nav.book}<Arrow /></a></div>)}
           </div>
         </div>
       </section>
 
       <section className="visit section-space page-gutter" id="visit">
-        <div className="visit-copy"><p className="eyebrow" data-reveal>{c.visit.eyebrow}</p><h2 data-reveal><Lines text={c.visit.title} /></h2><p className="section-description" data-reveal>{c.visit.description}</p><address>{c.visit.address}<br />{c.visit.city}</address><div className="visit-links"><a className="button" href={directions} target="_blank" rel="noreferrer">{c.visit.directions}<Arrow /></a><a className="phone-link" href={`tel:${phone}`}><span>{c.visit.call}</span>+995 555 70 27 37</a></div></div>
+        <div className="visit-copy"><p className="eyebrow" data-reveal>{c.visit.eyebrow}</p><h2 data-reveal><Lines text={c.visit.title} /></h2><p className="section-description" data-reveal>{c.visit.description}</p><address>{c.visit.address}<br />{c.visit.city}</address><div className="opening-hours"><h3>{c.visit.hoursTitle}</h3><dl><div><dt>{c.visit.weekdays}</dt><dd>{clinic.hours.opens}–{clinic.hours.closes}</dd></div><div><dt>{c.visit.sunday}</dt><dd>{c.visit.closed}</dd></div></dl></div><div className="visit-links"><a className="button" href={directions} target="_blank" rel="noreferrer">{c.visit.directions}<Arrow /></a><a className="phone-link" href={`tel:${phone}`}><span>{c.visit.call}</span>{clinic.phoneDisplay}</a></div></div>
         <div className="map-frame"><iframe src={mapEmbed} title={c.visit.mapTitle} width="600" height="450" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /></div>
       </section>
 
-      <section className="faq section-space page-gutter"><div><p className="eyebrow" data-reveal>{c.faq.eyebrow}</p><h2 data-reveal><Lines text={c.faq.title} /></h2></div><div className="faq-list">{c.faq.items.map((item) => <details key={item.question}><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></section>
+      <section className="reviews section-space page-gutter" id="reviews" aria-labelledby="reviews-title">
+        <div className="reviews-heading"><div><p className="eyebrow">{c.reviews.eyebrow}</p><h2 id="reviews-title"><Lines text={c.reviews.title} /></h2><p className="section-description">{c.reviews.description}</p></div>
+          <div className="reviews-summary"><p className="review-score" aria-label={c.reviews.rating.replace("{rating}", String(googleReviewSnapshot.rating))}>{googleReviewSnapshot.rating}<span aria-hidden="true"> / 5</span></p><p>{c.reviews.count.replace("{count}", String(googleReviewSnapshot.count))}</p><p className="review-checked">{c.reviews.checked} <time dateTime={googleReviewSnapshot.checkedOn}>{new Intl.DateTimeFormat(locale === "ka" ? "ka-GE" : locale === "ru" ? "ru-RU" : "en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${googleReviewSnapshot.checkedOn}T00:00:00Z`))}</time></p><a className="text-link" href={clinic.googleMaps} target="_blank" rel="noreferrer">{c.reviews.all}<Arrow /></a></div>
+        </div>
+        <div className="review-grid">{googleReviews.map((review) => <figure className="review-card" key={review.url}>
+          <div className="review-card-top"><span className="review-stars" role="img" aria-label={c.reviews.rating.replace("{rating}", String(review.rating))}>★★★★★</span><span>Google</span></div>
+          <blockquote><p>“{review.quote[locale]}”</p></blockquote><figcaption><strong>{review.author}</strong><span>{locale === "en" ? c.reviews.excerpt : c.reviews.translated}</span></figcaption>
+          <a className="text-link" href={review.url} target="_blank" rel="noreferrer" aria-label={`${c.reviews.read} — ${review.author}`}>{c.reviews.read}<Arrow /></a>
+        </figure>)}</div>
+      </section>
+
+      <section className="faq section-space page-gutter"><div><p className="eyebrow" data-reveal>{c.faq.eyebrow}</p><h2 data-reveal><Lines text={c.faq.title} /></h2></div><div className="faq-list">{c.faq.items.map((item) => <details key={item.question}><summary><span className="faq-question">{item.question}</span><span className="faq-icon" aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div></section>
 
       <section className="closing section-space page-gutter"><div className="closing-orbit" aria-hidden="true"><i /><i /><i /></div><p className="eyebrow" data-reveal>{c.closing.eyebrow}</p><h2 data-reveal><Lines text={c.closing.title} /></h2><a className="button button-light" href={instagram} target="_blank" rel="noreferrer" data-reveal>{c.closing.cta}<Arrow /></a></section>
     </main>
 
-    <footer className="site-footer page-gutter"><div className="footer-top"><p><Lines text={c.footer.tagline} /></p><LanguageLinks locale={locale} label={c.footer.language} /><a className="text-link" href="#top">{c.footer.back}<span className="up-arrow"><Arrow /></span></a></div><div className="footer-wordmark" aria-hidden="true">zen dental<span>.</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {c.footer.rights}</span><a href={instagram} target="_blank" rel="noreferrer">{c.footer.instagram}<Arrow /></a><a href={facebook} target="_blank" rel="noreferrer">Facebook<Arrow /></a><a href={`tel:${phone}`}>{c.footer.call}<Arrow /></a><span>{c.visit.city}</span></div></footer>
+    <footer className="site-footer page-gutter">{!!pages.length && <nav className="content-links" aria-label={c.footer.information}>{pages.map((page) => <Link className="text-link" key={page.href} href={page.href}>{page.title}<Arrow /></Link>)}</nav>}<div className="footer-top"><p><Lines text={c.footer.tagline} /></p><LanguageLinks locale={locale} label={c.footer.language} /><a className="text-link" href="#top">{c.footer.back}<span className="up-arrow"><Arrow /></span></a></div><div className="footer-wordmark" aria-hidden="true">zen dental<span>.</span></div><div className="footer-bottom"><span>© {new Date().getFullYear()} {c.footer.rights}</span><a href={instagram} target="_blank" rel="noreferrer">{c.footer.instagram}<Arrow /></a><a href={facebook} target="_blank" rel="noreferrer">Facebook<Arrow /></a><a href={`tel:${phone}`}>{c.footer.call}<Arrow /></a><span>{c.visit.city}</span></div></footer>
   </div>;
 }

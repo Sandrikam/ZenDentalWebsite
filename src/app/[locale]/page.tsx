@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { publishedPages } from "@/content/pages";
 import { notFound } from "next/navigation";
 import { isLocale, locales } from "@/lib/content";
 import { getDictionary } from "@/lib/dictionaries";
@@ -54,6 +55,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   const content = await getDictionary(locale);
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData(locale, content)).replace(/</g, "\\u003c") }} />
-    <DentalExperience locale={locale} content={content} />
+    <DentalExperience locale={locale} content={content} pages={publishedPages(locale).map((page) => ({ href: `/${locale}/${page.path}`, title: page.translations[locale]!.title }))} />
   </>;
 }

@@ -22,6 +22,11 @@ export const en = {
       { label: "SMILE CARE", title: "Find your confidence.", text: "Tell us what you’d like to change. We’ll talk through possibilities for your smile, at a pace that feels right for you.", link: "Talk about your smile" },
     ],
   },
+  reviews: {
+    eyebrow: "IN THEIR WORDS", title: "A little reassurance.\nFrom real patients.",
+    description: "Selected excerpts from public Google reviews. Read the originals and more patient experiences on Google.",
+    rating: "{rating} out of 5", count: "{count} Google reviews", checked: "Checked", all: "Read all reviews on Google", read: "Read original review", excerpt: "Excerpt · original in English", translated: "Translated excerpt · original in English",
+  },
   statement: {
     eyebrow: "A MORE HUMAN APPROACH",
     text: "Good care starts with being heard. Your questions, your comfort, your smile. We make room for all of it.",
@@ -39,6 +44,7 @@ export const en = {
   visit: {
     eyebrow: "COME SAY HELLO", title: "Your next visit\nstarts here.",
     description: "Find us on Merab Kostava Street in Tbilisi. Send a message or give us a call, and we’ll help you plan a visit.",
+    hoursTitle: "Opening hours", weekdays: "Monday–Saturday", sunday: "Sunday", closed: "Closed",
     address: "63 Merab Kostava Street", city: "Tbilisi, Georgia", directions: "Get directions", call: "Call us", mapTitle: "Zen Dental location on Google Maps",
   },
   faq: {
@@ -50,7 +56,7 @@ export const en = {
     ],
   },
   closing: { eyebrow: "A LITTLE MORE ZEN", title: "Make room\nfor your smile.", cta: "Book a visit" },
-  footer: { tagline: "Thoughtful dental care.\nTbilisi, Georgia.", instagram: "Instagram", call: "Call us", back: "Back to top", language: "Language", rights: "Zen Dental" },
+  footer: { information: "Patient information", tagline: "Thoughtful dental care.\nTbilisi, Georgia.", instagram: "Instagram", call: "Call us", back: "Back to top", language: "Language", rights: "Zen Dental" },
 };
 
 export type Dictionary = typeof en;

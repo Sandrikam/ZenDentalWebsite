@@ -46,7 +46,20 @@ for (const { locale, title, hero, map } of cases) {
   const clinic = entities.find((entity) => entity["@type"] === "Dentist");
   assert.equal(clinic?.telephone, "+995555702737", `${locale} structured contact`);
   assert.equal(clinic?.address.streetAddress, "63 Merab Kostava Street");
-  assert.ok(!clinic?.aggregateRating && !clinic?.openingHoursSpecification && !clinic?.geo, `${locale} no unconfirmed business details`);
+  assert.ok(!clinic?.aggregateRating, `${locale} no self-serving business review markup`);
+  assert.equal(clinic?.geo.latitude, 41.7141394, `${locale} verified Google place pin`);
+  assert.equal(clinic?.geo.longitude, 44.7826574);
+  assert.equal(clinic?.openingHoursSpecification[0].opens, "10:00");
+  assert.equal(clinic?.openingHoursSpecification[0].closes, "19:00");
+  assert.equal(clinic?.openingHoursSpecification[0].dayOfWeek.length, 6);
+  assert.ok(html.includes('id="reviews"'), `${locale} reviews section`);
+  for (const source of ["WRbCrQXrzrxwxjAT8", "RtJH2HMRC3JYqkNh6"]) assert.ok(html.includes(`href="https://maps.app.goo.gl/${source}"`), `${locale} direct review source`);
+  assert.ok(html.includes('dateTime="2026-11-15"') || html.includes('datetime="2026-11-15"'), `${locale} dated rating snapshot`);
+  assert.ok(html.includes('tabindex="-1"') || html.includes('tabIndex="-1"'), `${locale} keyboard focus targets`);
+  for (let index = 0; index < 3; index++) {
+    assert.ok(html.includes(`id="approach-panel-${index}"`));
+    assert.ok(html.includes(`aria-controls="approach-panel-${index}"`));
+  }
   assert.equal(entities.find((entity) => entity["@type"] === "WebPage")?.url, `https://www.zendental.ge/${locale}`);
   const footer = html.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? "";
   assert.ok(footer.includes('href="https://www.instagram.com/zendental.ge/"'), `${locale} footer Instagram`);
@@ -64,6 +77,7 @@ if (base) {
 } else {
   const prerender = JSON.parse(await readFile(".next/prerender-manifest.json", "utf8"));
   assert.equal(prerender.dynamicRoutes["/[locale]"].fallback, false, "Unsupported locales have no dynamic fallback");
+  assert.equal(prerender.dynamicRoutes["/[locale]/[...path]"].fallback, false, "Unpublished content has no public fallback");
   for (const asset of ["zen-hero.png", "zen-hero-wide.png"]) {
     assert.ok((await stat(`public/images/${asset}`)).size > 0);
   }

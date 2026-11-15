@@ -3,10 +3,8 @@
 import { useEffect, useRef } from "react";
 
 /** An original point-cloud smile study, rather than borrowed medical scan imagery. */
-export function SmileField({ phase = 0 }: { phase?: number }) {
+export function SmileField({ phase = 0, still = false }: { phase?: number; still?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const phaseRef = useRef(phase);
-  useEffect(() => { phaseRef.current = phase; }, [phase]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -17,8 +15,8 @@ export function SmileField({ phase = 0 }: { phase?: number }) {
     let visible = true;
     let width = 0;
     let height = 0;
-    let rotation = 0;
-    let started = performance.now();
+    const rotation = phase * 0.55;
+    let started: number | undefined;
     const points: { x: number; y: number; z: number; size: number }[] = [];
     // Deterministic sampling keeps the image stable between mounts.
     for (let ring = 0; ring < 112; ring++) {
@@ -38,9 +36,8 @@ export function SmileField({ phase = 0 }: { phase?: number }) {
     const draw = (now: number) => {
       frame = 0;
       if (!visible) return;
-      const time = media.matches ? 0 : (now - started) / 1000;
-      const target = phaseRef.current * 0.55;
-      rotation += (target - rotation) * 0.045;
+      started ??= now;
+      const time = media.matches || still ? 0 : Math.min((now - started) / 1000, 4);
       const ry = -0.28 + rotation + Math.sin(time * 0.18) * 0.13;
       const rx = 0.13 + Math.cos(time * 0.17) * 0.06;
       context.clearRect(0, 0, width, height);
@@ -61,7 +58,8 @@ export function SmileField({ phase = 0 }: { phase?: number }) {
         context.arc(width / 2 + point.x * scale * perspective, height / 2 - point.y * scale * perspective, point.size * perspective, 0, Math.PI * 2);
         context.fill();
       }
-      if (!media.matches) frame = requestAnimationFrame(draw);
+      // Decorative motion settles within four seconds; it never loops forever.
+      if (!media.matches && !still && time < 4) frame = requestAnimationFrame(draw);
     };
 
     const resize = new ResizeObserver(([entry]) => {
@@ -80,7 +78,7 @@ export function SmileField({ phase = 0 }: { phase?: number }) {
       frame = visible ? requestAnimationFrame(draw) : 0;
     });
     const updatePreference = () => {
-      started = performance.now();
+      started = undefined;
       if (frame) cancelAnimationFrame(frame);
       frame = requestAnimationFrame(draw);
     };
@@ -93,7 +91,7 @@ export function SmileField({ phase = 0 }: { phase?: number }) {
       visibility.disconnect();
       media.removeEventListener("change", updatePreference);
     };
-  }, []);
+  }, [phase, still]);
 
   return <canvas ref={canvasRef} className="smile-field" aria-hidden="true" />;
 }

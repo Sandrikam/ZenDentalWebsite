@@ -17,7 +17,7 @@ npm run dev
 
 Open http://localhost:3000. Edit `src/components/dental-experience.tsx` to start building.
 
-Contact destinations and page content are in `src/components/dental-experience.tsx`; design tokens and responsive styles are in `src/app/globals.css`. The text wordmark can be replaced when the official logo is supplied.
+Verified contact destinations, hours and map are in `src/lib/clinic.ts`; page copy is in `src/lib/content.ts` and `src/lib/locales/`; design tokens and responsive styles are in `src/app/globals.css`. The text wordmark can be replaced when the official logo is supplied.
 
 ```sh
 npm run typecheck
@@ -40,6 +40,14 @@ The Next.js application lives in `src/app`; put static assets in `public/`.
 
 The site serves `/ka`, `/en`, and `/ru`, with `/` redirecting to Georgian. Route metadata is generated in `src/app/[locale]/page.tsx`. Edit English content in `src/lib/content.ts` and translated dictionaries in `src/lib/locales/`. The shared component is `src/components/dental-experience.tsx`.
 
-Motion uses GSAP ScrollTrigger with reduced-motion support and native scrolling. The Google Maps iframe is the exact embed supplied by the clinic.
+Motion uses GSAP ScrollTrigger with reduced-motion support and native scrolling. The Google Maps iframe was refreshed from the same clinic profile after Google rejected the original embed parameter.
 
 After building, run `npm run check:site` to validate the rendered locale HTML, SEO alternates, map, and contact links. Optionally pass a running server URL: `npm run check:site -- http://localhost:3000`.
+
+## Content and review maintenance
+
+Two manually selected Google review excerpts live in `src/lib/reviews.ts`. Their original links, authors and ratings are preserved. Georgian/Russian excerpts are labeled translations. The aggregate rating is a dated snapshot, not a live feed, and is deliberately omitted from business review schema. Recheck the snapshot before updating it.
+
+Future service, doctor, prices and patient-information pages use `src/content/pages.ts`. Collection briefs are in `content/templates/`. Set a page to `published` only after clinic approval and complete translations. Only approved, nonempty translations get static routes, footer links, canonical/language metadata and sitemap entries. Drafts stay unavailable. There are currently no published detail pages. Booking process changes remain deferred.
+
+Verification: `npm test` checks the content publication gate. `npm run build`, `npm run typecheck` and `npm run check:site` check the production build and locale HTML. See `docs/accessibility-mobile-review.md` for browser QA coverage and limitations.

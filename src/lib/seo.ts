@@ -1,10 +1,10 @@
 import type { Dictionary, Locale } from "./content";
+import { clinic } from "./clinic";
 
 export const siteOrigin = "https://www.zendental.ge";
 export const socialImage = "/images/zen-hero-wide.png";
 
-// Only established clinic details belong here. Add hours, doctors and prices
-// once the clinic confirms them; map viewport coordinates are not a pin location.
+// Use verified clinic facts. Review excerpts stay out of business rating markup.
 export function structuredData(locale: Locale, content: Dictionary) {
   const url = `${siteOrigin}/${locale}`;
   return {
@@ -13,16 +13,17 @@ export function structuredData(locale: Locale, content: Dictionary) {
       {
         "@type": "Dentist",
         "@id": `${siteOrigin}/#clinic`,
-        name: "Zen Dental",
+        name: clinic.name,
         url: `${siteOrigin}/`,
-        telephone: "+995555702737",
+        telephone: clinic.telephone,
         address: {
           "@type": "PostalAddress",
-          streetAddress: "63 Merab Kostava Street",
-          addressLocality: "Tbilisi",
-          addressCountry: "GE",
+          ...clinic.address,
         },
-        sameAs: ["https://www.instagram.com/zendental.ge/", "https://www.facebook.com/zendentaltbilisi"],
+        geo: { "@type": "GeoCoordinates", ...clinic.geo },
+        hasMap: clinic.googleMaps,
+        openingHoursSpecification: [{ "@type": "OpeningHoursSpecification", dayOfWeek: clinic.hours.days, opens: clinic.hours.opens, closes: clinic.hours.closes }],
+        sameAs: [clinic.instagram, clinic.facebook, clinic.googleMaps],
       },
       {
         "@type": "WebSite",

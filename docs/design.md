@@ -38,8 +38,8 @@ The current Neko site was inspected in Chrome during this revision. Its centered
 - Language navigation preserves the current section hash. Native language names appear in accessible labels and tooltips.
 - GSAP ScrollTrigger controls the hero image's scale, blur and inset/rounded framing, heading entrance, card reveals, and word-by-word text emphasis. Normal browser scrolling remains intact.
 - The logo, contact CTA and language controls remain available when the middle navigation retracts during downward scrolling. Keyboard focus restores navigation. Mobile menu supports Escape.
-- Reduced motion disables scroll animation and renders point-cloud artwork as a still image. Animation contexts and observers are cleaned up on locale change/unmount; offscreen canvases stop rendering.
-- The location panel contains the user's exact Google Maps iframe, with lazy loading, fullscreen support, translated title and strict-origin-when-cross-origin referrer policy.
+- Reduced motion disables scroll animation and renders point-cloud artwork as a still image. Otherwise the point-cloud artwork settles within four seconds, and keyboard interaction uses a static frame. Animation contexts and observers are cleaned up on locale change/unmount; offscreen canvases stop rendering.
+- The location panel contains a fresh Google Maps iframe for the user's exact clinic place (the original pb parameter was rejected), with lazy loading, fullscreen support, translated title and strict-origin-when-cross-origin referrer policy.
 - Automated checks: npm run build, npm run typecheck, npm run check:site. The site checker inspects generated HTML without networking by default, or accepts a running server URL as its argument.
 
 ### Wide hero artwork
