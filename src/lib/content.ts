@@ -18,8 +18,8 @@ export const en = {
   "hero": {
     "eyebrow": "Zen Dental · Tbilisi",
     "lines": [
-      "Dental care on",
-      "Kostava Street"
+      "Your teeth are more",
+      "than a smile"
     ],
     "description": "Free consultation. No commitment to treatment.",
     "cta": "Free consultation",
@@ -117,6 +117,26 @@ export const en = {
     "title": "Free consultation",
     "cta": "Message on Instagram",
     "description": "No commitment to treatment"
+  },
+  "team": {
+    "nav": "Doctors",
+    "eyebrow": "Our team",
+    "title": "Our doctors",
+    "intro": "Meet the dentists you will see at Zen Dental.",
+    "all": "Meet the whole team",
+    "profile": "View profile",
+    "back": "All doctors",
+    "home": "Home",
+    "others": "Other doctors",
+    "ctaTitle": "Book a free consultation",
+    "ctaText": "Call or message the clinic and we will find a time that suits you.",
+    "metaTitle": "Our doctors | Zen Dental, Tbilisi",
+    "metaDescription": "Meet the dentists at Zen Dental, 63 Merab Kostava Street, Tbilisi. Free consultation with no commitment to treatment.",
+    "portraitAlt": "Portrait of {name}, Zen Dental"
+  },
+  "clinic": {
+    "eyebrow": "Inside Zen Dental",
+    "title": "Our clinic"
   },
   "footer": {
     "information": "Patient information",

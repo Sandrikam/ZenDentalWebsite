@@ -10,8 +10,9 @@ export type PageTranslation = {
 };
 
 export type ClinicPage = {
-  kind: "service" | "doctor" | "prices" | "patient-info";
-  path: `services/${string}` | `team/${string}` | "prices" | "patients";
+  kind: "service" | "prices" | "patient-info";
+  // Doctor profiles live in src/content/doctors.ts and render under /[locale]/team.
+  path: `services/${string}` | "prices" | "patients";
   status: "draft" | "published";
   approvedBy: string;
   translations: Partial<Record<Locale, PageTranslation>>;

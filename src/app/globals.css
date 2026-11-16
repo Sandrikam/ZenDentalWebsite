@@ -65,7 +65,7 @@ section>div { min-width:0; }
 .up-arrow { display:flex; transform:rotate(-90deg); }
 
 /* The original smile sculpture is the sole conceptual visual. */
-.hero { position:relative; overflow:clip; display:flex; flex-direction:column; min-height:680px; height:100svh; max-height:960px; background:var(--blush); }
+.hero { position:relative; overflow:clip; display:flex; flex-direction:column; min-height:680px; height:100svh; max-height:960px; background:var(--paper); }
 .hero-scene,.hero-photo,.hero-wash { position:absolute; inset:0; }
 .hero-photo img { object-fit:cover; object-position:35% center; }
 .hero-wash { background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.22)); }
@@ -256,3 +256,72 @@ section>div { min-width:0; }
 .care-intro { padding-bottom:32px; }
 .section-heading { margin-bottom:32px; }
 @media(max-width:700px) { .care-intro { padding-bottom:24px; } .section-heading { margin-bottom:24px; } }
+
+/* Team: real clinic portraits, shared card across the homepage and /team. */
+.team-preview { padding-top:0; }
+.team-preview-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:40px; }
+.team-preview-heading h2 { margin-top:16px; }
+.doctor-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:40px 24px; }
+.doctor-card { display:flex; flex-direction:column; gap:4px; min-width:0; }
+.doctor-card-photo { display:block; aspect-ratio:4/5; overflow:hidden; margin-bottom:16px; border-radius:16px; background:var(--surface); }
+.doctor-card-photo img { display:block; width:100%; height:100%; object-fit:cover; object-position:center top; transition:transform 400ms var(--ease); }
+.doctor-card:hover .doctor-card-photo img { transform:scale(1.03); }
+.doctor-card-name { font-size:clamp(22px,1.8vw,26px); transition:color 160ms ease; }
+.doctor-card:hover .doctor-card-name { color:var(--rose-deep); }
+.doctor-card-role { color:var(--muted); font-size:14px; }
+.content-header-actions { display:flex; align-items:center; gap:16px; }
+.team-page { max-width:1400px; margin-inline:auto; padding-block:80px 0; }
+.team-page-heading { max-width:720px; margin-bottom:56px; }
+.team-page-heading h1,.doctor-profile-copy h1 { margin-top:16px; font-size:clamp(40px,5vw,72px); }
+.team-cta { margin:96px 0 0; }
+.doctor-profile { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); gap:64px; align-items:center; }
+.doctor-profile-photo { overflow:hidden; border-radius:24px; background:var(--surface); }
+.doctor-profile-photo img { display:block; width:100%; height:auto; aspect-ratio:4/5; object-fit:cover; object-position:center top; }
+.doctor-profile-copy { max-width:560px; }
+.doctor-others { padding-block:96px; }
+.doctor-others h2 { margin-bottom:40px; }
+@media(max-width:1199px) { .doctor-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media(max-width:700px) {
+  .team-preview-heading { flex-direction:column; align-items:start; gap:8px; margin-bottom:32px; }
+  .doctor-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:32px 16px; }
+  .doctor-card-name { font-size:19px; }
+  .doctor-card-role { font-size:13px; }
+  .content-header { flex-wrap:wrap; gap:8px 16px; padding-block:16px; }
+  .content-header-actions { flex-wrap:wrap; gap:4px 12px; }
+  .team-page { padding-block:48px 0; }
+  .doctor-profile { grid-template-columns:minmax(0,1fr); gap:32px; }
+  .team-cta { margin-top:64px; }
+  .doctor-others { padding-block:64px; }
+}
+
+/* Navbar language dropdown; the footer keeps the inline KA/EN/RU links. */
+.language-menu { position:relative; }
+.language-trigger { display:inline-flex; align-items:center; gap:6px; min-width:44px; min-height:44px; padding:0 10px; border:0; border-radius:12px; background:transparent; font-size:12px; font-weight:600; transition:background-color 160ms ease; }
+.language-trigger:hover,.language-trigger[aria-expanded=true] { background:var(--surface); }
+.language-trigger svg { transition:transform 180ms var(--ease); }
+.language-trigger[aria-expanded=true] svg { transform:rotate(180deg); }
+.language-list { position:absolute; z-index:60; top:calc(100% + 8px); right:0; min-width:180px; margin:0; padding:6px; list-style:none; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 32px rgba(48,43,44,.08); opacity:0; visibility:hidden; transform:translateY(-4px) scale(.98); transform-origin:top right; transition:opacity 140ms ease,transform 180ms var(--ease),visibility 140ms; }
+.language-list.is-open { opacity:1; visibility:visible; transform:none; }
+.language-list a { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:44px; padding:0 12px; border-radius:10px; font-size:14px; transition:background-color 120ms ease,color 120ms ease; }
+.language-list a:hover { background:var(--surface); color:var(--rose-deep); }
+.language-list a[aria-current=page] { color:var(--rose-deep); font-weight:600; }
+.language-code { color:var(--muted); font-size:12px; font-weight:400; }
+[data-input-method=keyboard] .language-list { transition:none; }
+
+/* Clinic gallery: real interior and building photos, just before "Find us". */
+.clinic-gallery { padding-top:0; }
+.clinic-gallery h2 { margin-top:16px; }
+.clinic-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:clamp(180px,17vw,260px); grid-auto-flow:dense; gap:16px; }
+.clinic-photo { position:relative; overflow:hidden; margin:0; border-radius:16px; background:var(--surface); }
+.clinic-photo.is-feature { grid-column:span 2; grid-row:span 2; }
+.clinic-photo.is-wide { grid-column:span 2; }
+.clinic-photo.is-tall { grid-row:span 2; }
+.clinic-photo img { object-fit:cover; transition:transform 500ms var(--ease); }
+.clinic-photo:hover img { transform:scale(1.03); }
+.clinic-photo figcaption { position:absolute; left:12px; bottom:12px; max-width:calc(100% - 24px); padding:6px 12px; border-radius:999px; background:rgba(255,255,255,.92); color:var(--ink); font-size:13px; line-height:1.4; }
+@media(max-width:700px) {
+  .clinic-grid { grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:150px; gap:10px; }
+  .clinic-photo.is-feature,.clinic-photo.is-wide { grid-column:span 2; }
+  .clinic-photo.is-feature { grid-row:span 2; }
+  .clinic-photo figcaption { left:8px; bottom:8px; max-width:calc(100% - 16px); padding:4px 10px; font-size:12px; }
+}

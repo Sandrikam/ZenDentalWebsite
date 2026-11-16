@@ -8,3 +8,7 @@ out/
 next-env.d.ts
 .DS_Store
 .vercel
+
+# Raw photo drops; commit only web-sized copies in public/images
+content/125 ZenDental/
+content/*.zip

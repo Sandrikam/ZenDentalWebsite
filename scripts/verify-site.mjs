@@ -3,9 +3,9 @@ import { readFile, stat } from "node:fs/promises";
 
 const base = process.argv[2];
 const cases = [
-  { locale: "ka", title: "სტომატოლოგიური კლინიკა თბილისში", hero: "სტომატოლოგია", map: "Zen Dental-ის მდებარეობა Google Maps-ზე" },
-  { locale: "en", title: "Dental clinic in Tbilisi", hero: "Kostava Street", map: "Zen Dental location on Google Maps" },
-  { locale: "ru", title: "Стоматологическая клиника в Тбилиси", hero: "Стоматология", map: "Zen Dental на Google Картах" },
+  { locale: "ka", title: "სტომატოლოგიური კლინიკა თბილისში", hero: "ვიდრე ღიმილი", map: "Zen Dental-ის მდებარეობა Google Maps-ზე" },
+  { locale: "en", title: "Dental clinic in Tbilisi", hero: "than a smile", map: "Zen Dental location on Google Maps" },
+  { locale: "ru", title: "Стоматологическая клиника в Тбилиси", hero: "чем улыбка", map: "Zen Dental на Google Картах" },
 ];
 
 if (base) {

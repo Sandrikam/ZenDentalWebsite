@@ -7,6 +7,10 @@ import { useEffect, useRef, useState } from "react";
 import type { Dictionary, Locale } from "@/lib/content";
 import { clinic } from "@/lib/clinic";
 import { googleReviews, googleReviewSnapshot } from "@/lib/reviews";
+import { doctors } from "@/content/doctors";
+import { DoctorCard } from "@/components/doctor-card";
+import { LanguageMenu } from "@/components/language-menu";
+import { clinicPhotos } from "@/content/clinic-photos";
 
 const { instagram, facebook, telephone: phone, googleMaps: directions, mapEmbed } = clinic;
 const languages = [
@@ -144,11 +148,12 @@ export function DentalExperience({ locale, content: c, pages = [] }: { locale: L
         if (event.key === "Escape") { setMenuOpen(false); document.getElementById("menu-toggle")?.focus(); }
       }}>
         <a href="#care" onClick={() => setMenuOpen(false)}>{c.nav.care}</a>
+        <a href="#team" onClick={() => setMenuOpen(false)}>{c.team.nav}</a>
         <a href="#approach" onClick={() => setMenuOpen(false)}>{c.nav.approach}</a>
         <a href="#visit" onClick={() => setMenuOpen(false)}>{c.nav.visit}</a>
       </nav>
       <div className="header-actions">
-        <LanguageLinks locale={locale} label={c.nav.language} />
+        <LanguageMenu locale={locale} label={c.nav.language} keepHash />
         <a className="button button-small header-book" href={instagram} target="_blank" rel="noreferrer">{c.nav.book}<Arrow /></a>
         <button id="menu-toggle" className="menu-toggle" aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}>
           <span className="sr-only">{menuOpen ? c.nav.close : c.nav.menu}</span><span className={menuOpen ? "menu-lines is-open" : "menu-lines"} aria-hidden="true"><i /><i /></span>
@@ -182,6 +187,11 @@ export function DentalExperience({ locale, content: c, pages = [] }: { locale: L
         <div className="care-contact"><a className="text-link" href="#visit">{c.care.contact}<Arrow /></a></div>
       </section>
 
+      <section className="team-preview section-space page-gutter" id="team" aria-labelledby="team-title">
+        <div className="team-preview-heading"><div><p className="eyebrow">{c.team.eyebrow}</p><h2 id="team-title">{c.team.title}</h2></div><Link className="text-link" href={`/${locale}/team`}>{c.team.all}<Arrow /></Link></div>
+        <div className="doctor-grid">{doctors.map((doctor) => <DoctorCard key={doctor.slug} doctor={doctor} locale={locale} alt={c.team.portraitAlt} />)}</div>
+      </section>
+
       <section className="approach section-space page-gutter" id="approach">
         <div className="section-heading"><h2><Lines text={c.approach.title} /></h2></div>
         <div className="approach-layout">
@@ -199,6 +209,14 @@ export function DentalExperience({ locale, content: c, pages = [] }: { locale: L
             {c.approach.steps.map((step, index) => <div role="tabpanel" id={`approach-panel-${index}`} tabIndex={0} aria-labelledby={`approach-tab-${index}`} hidden={activeApproach !== index} className="approach-panel" key={step.label}><h3>{step.title}</h3><p>{step.text}</p><a className="text-link" href={instagram} target="_blank" rel="noreferrer">{c.nav.book}<Arrow /></a></div>)}
           </div>
         </div>
+      </section>
+
+      <section className="clinic-gallery section-space page-gutter" id="clinic" aria-labelledby="clinic-title">
+        <div className="section-heading"><p className="eyebrow">{c.clinic.eyebrow}</p><h2 id="clinic-title">{c.clinic.title}</h2></div>
+        <div className="clinic-grid">{clinicPhotos.map((photo) => <figure className={`clinic-photo${photo.layout ? ` is-${photo.layout}` : ""}`} key={photo.src}>
+          <Image src={photo.src} alt={photo.alt[locale]} fill sizes={photo.layout === "feature" || photo.layout === "wide" ? "(max-width: 700px) 100vw, 50vw" : "(max-width: 700px) 50vw, 25vw"} />
+          <figcaption>{photo.label[locale]}</figcaption>
+        </figure>)}</div>
       </section>
 
       <section className="visit section-space page-gutter" id="visit">

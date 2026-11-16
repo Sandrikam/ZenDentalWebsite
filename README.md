@@ -52,6 +52,10 @@ Future service, doctor, prices and patient-information pages use `src/content/pa
 
 Verification: `npm test` checks the content publication gate. `npm run build`, `npm run typecheck` and `npm run check:site` check the production build and locale HTML. See `docs/accessibility-mobile-review.md` for browser QA coverage and limitations.
 
+## Doctors
+
+The team section on the homepage, `/[locale]/team` and one page per doctor read from `src/content/doctors.ts`. Names and portraits are real; roles and bios are generic placeholders until the clinic supplies approved text. Placeholder profiles are visible but `noindex` and left out of the sitemap. See `content/templates/doctor.md`.
+
 ## Future booking system
 
 The proposed booking architecture and clinic decisions are documented in [the booking plan](docs/booking-plan.md): approximately seven doctors using existing Google accounts, two public chairs, a head-doctor-only third chair, administrator approval, and SMS reminders with optional email. This is a discussion draft for future implementation.
